@@ -29,8 +29,6 @@ Mutation.updatePersonalIdentification.req.vtl
 Mutation.updatePhone.req.vtl
 PaymentMethod.settings.req.vtl
 Query.getPaymentMethod.req.vtl
-Query.listOrderDetails.req.vtl
-Query.listOrderNotes.req.vtl
 Query.listPersonsWithoutOrders.req.vtl
 
 For Staff only
@@ -108,10 +106,11 @@ Query.getOrder.req.vtl
 Query.getOrdersByStatus.req.vtl
 Query.getPerson.req.vtl
 Query.getTransaction.req.vtl
+Query.listOrderDetails.req.vtl
+Query.listOrderNotes.req.vtl
 Query.listOrders.req.vtl
 Query.listOrdersSummary.req.vtl
 Query.listPersons.req.vtl
 Query.listPersonsSummary.req.vtl
 Query.listProductsSummary.req.vtl
 
-add payment (lambda)
