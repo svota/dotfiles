@@ -88,8 +88,8 @@ call plug#begin('~/.vim/plugged')
 " Emmet for HTML and CSS
 Plug 'mattn/emmet-vim'
 
-" Ctrlp.vim for fuzzy search
-Plug 'ctrlpvim/ctrlp.vim'
+" fzf for fuzzy search
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 
 " Surround.vim for surrounding
 Plug 'tpope/vim-surround'
@@ -103,10 +103,9 @@ call plug#end()
 " redefine trigger key
 let g:user_emmet_leader_key=','
 
-"-- CTRLP CONFIG --"
+"-- FZF CONFIG --"
 " redefine entry key
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
+map <C-P> :FZF<CR>
 
 " Ignore some folders and files for CtrlP indexing
 let g:ctrlp_custom_ignore = {
