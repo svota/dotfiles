@@ -198,7 +198,13 @@ map <C-M-p> :FZF ~/<CR>
 
 " set window layout
 " - down / up / left / right
-let g:fzf_layout = { 'down': '30%' }
+let g:fzf_layout = { 'down': '40%' }
+
+" Ignore some folders and files for CtrlP indexing
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\.git$\|\.yardoc\|node_modules\|log\|tmp$',
+  \ 'file': '\.so$\|\.dat$|\.DS_Store$'
+  \ }
 
 " Customize fzf colors to match your color scheme
 " - fzf#wrap translates this to a set of `--color` options
