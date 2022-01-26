@@ -1,0 +1,9 @@
+#!/bin/bash
+
+CURRENT_GIT_BRANCH=$(git branch 2>/dev/null | grep '^*' | colrm 1 2)
+
+git checkout develop/daniel
+git pull
+git merge -m "$CURRENT_GIT_BRANCH" $CURRENT_GIT_BRANCH 
+git push
+git checkout $CURRENT_GIT_BRANCH

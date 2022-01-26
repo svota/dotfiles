@@ -1,0 +1,4 @@
+#!/bin/bash
+
+aws-vault login -s masos
+aws-vault exec masos --no-session -- yarn develop
