@@ -67,30 +67,64 @@ inoremap II <esc>
 
 colorscheme ron
 
+" stop accidentally closing vim with C-Z
+noremap <C-Z> <NOP>
+
 " NETRW
+" Toggle Vexplore with Ctrl-E
+function! ToggleVExplorer()
+    if exists("t:expl_buf_num")
+        let expl_win_num = bufwinnr(t:expl_buf_num)
+        if expl_win_num != -1
+            let cur_win_nr = winnr()
+            echo expl_win_num
+            exec expl_win_num . 'wincmd w'
+            close
+            exec cur_win_nr - 1 . 'wincmd w'
+            unlet t:expl_buf_num
+        else
+            unlet t:expl_buf_num
+        endif
+    else
+        exec '1wincmd w'
+        Vexplore
+        let t:expl_buf_num = bufnr("%")
+    endif
+endfunction
+map <silent> <C-M-E> :call ToggleVExplorer()<CR>
+
+" Hit enter in the file browser to open the selected
+" file with :vsplit to the right of browser
+"let g:netrw_altv = 1
+" Open new files in a vertical split
+let g:netrw_browse_split = 4
+
+
+" Default to tree mode
+let g:netrw_liststyle = 3
 " Set tree-view for netrw file tree
 let g:netrw_liststyle = 3
 
 " Remove banner
 let g:netrw_banner = 0
 
-" Open new files in the previous window
-let g:netrw_browse_split = 4
-
 " Sets netrw size
-let g:netrw_winsize = 15
+let g:netrw_winsize = 20
 
 " Helps grep ignore unimportant folders (comma-separated list)
-set wildignore=*/node_modules/*,*/.git/*,*/.cache/*
+set wildignore=*/node_modules/*,*/.git/*,*/.cache/*,*/#current-cloud-backend/*
 
 " Faster saving and exiting
 nnoremap <silent><leader>w :w!<CR>
 nnoremap <silent><leader>q :q!<CR>
 nnoremap <silent><leader>x :x<CR>
-" Open Vim configuration file for editing
-nnoremap <silent><leader>2 :e ~/.vimrc<CR>
-" Source Vim configuration file and install plugins
+nnoremap <c-t> :tabe<CR>
+" Source Vim configuration file
 nnoremap <silent><leader>1 :source ~/.vimrc<CR>
+" Open Vim configuration file for editing
+nnoremap <silent><leader>2 :tabe ~/.vimrc<CR>
+" install plugins 
+nnoremap <silent><leader>3 :PlugInstall<CR>
 
 " Easier movement between split windows CTRL + {h, j, k, l}
 nnoremap <c-h> <c-w>h
@@ -125,10 +159,77 @@ Plug 'jparise/vim-graphql'
 " completion
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
+" tests
+Plug 'vim-test/vim-test'
+
+" NERDTree for navigation
+Plug 'preservim/nerdtree' |
+  \ Plug 'Xuyuanp/nerdtree-git-plugin'
+
 call plug#end()
 
+
+"-- NERDTree --"
+" open with CTRL-E
+nnoremap <C-E> :NERDTreeMirror<CR>:NERDTreeToggle<CR>
+" Mirror the NERDTree before showing it. This makes it the same on all tabs.
+nnoremap <C-n> :NERDTreeMirror<CR>:NERDTreeFocus<CR>
+
+" Start NERDTree and put the cursor back in the other window.
+autocmd VimEnter * NERDTree | wincmd p
+
+" Close the tab if NERDTree is the only window remaining in it.
+autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
+autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
+    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
+
+" hide the boring brackets([ ])?
+let g:NERDTreeGitStatusConcealBrackets = 0 " default: 0
+
+"-- Vim-test --"
+nmap <silent> <leader>t :TestNearest<CR>
+nmap <silent> <leader>T :TestFile<CR>
+nmap <silent> <leader>S :TestSuite<CR>
+nmap <silent> <leader>l :TestLast<CR>
+nmap <silent> <leader>g :TestVisit<CR>
+" make test commands execute using :!
+let test#strategy = "basic"
+
+" open the test file genereated from the current filename
+function! OpenSpec()
+  let currFileName = expand("%")
+  let partial = substitute(currFileName, "/src/", "/test/unit/", "")
+  let final = substitute(partial, '\.ts', '.spec.ts', "")
+  exec "vs " . final 
+endfunction
+function! OpenSpecFile()
+  let currFileName = expand("%")
+  let partial = substitute(currFileName, "/test/unit/", "/src/",  "")
+  let final = substitute(partial, '\.spec\.ts', '.ts', "")
+  exec "vs " . final 
+endfunction
+nmap <silent> <leader>et :cal OpenSpec()<CR>
+nmap <silent> <leader>ef :cal OpenSpecFile()<CR>
+
+" create all necessary folders when saving a file
+function s:MkNonExDir(file, buf)
+    if empty(getbufvar(a:buf, '&buftype')) && a:file!~#'\v^\w+\:\/'
+        let dir=fnamemodify(a:file, ':h')
+        if !isdirectory(dir)
+            call mkdir(dir, 'p')
+        endif
+    endif
+endfunction
+augroup BWCCreateDir
+    autocmd!
+    autocmd BufWritePre * :call s:MkNonExDir(expand('<afile>'), +expand('<abuf>'))
+augroup END
+
+
 "-- CoC extensions --"
-let g:coc_global_extensions = ['coc-tsserver', 'coc-json']
+let g:coc_global_extensions = ['coc-tsserver', 'coc-json', 'coc-pairs']
 
 " Add CoC Prettier if prettier is installed
 if isdirectory('./node_modules') && isdirectory('./node_modules/prettier')
@@ -183,11 +284,8 @@ nmap <leader>a  <Plug>(coc-codeaction-selected)
 " Remap keys for applying codeAction to the current buffer.
 nmap <leader>ac  <Plug>(coc-codeaction)
 " Apply AutoFix to problem on the current line.
-nmap <leader>qf  <Plug>(coc-fix-current)
+nmap <leader>af  <Plug>(coc-fix-current)
 
-"-- EMMET CONFIG --"
-" redefine trigger key
-let g:user_emmet_leader_key=','
 
 "-- FZF CONFIG --"
 " redefine entry key
@@ -196,15 +294,14 @@ map <C-p> :FZF<CR>
 " set global finder key
 map <C-M-p> :FZF ~/<CR>
 
+" finder that only returns git files
+command! -complete=dir -nargs=? GFiles 
+  \ call fzf#run(fzf#wrap('FZF', {'source': 'git ls-files', 'dir': <q-args>}))
+map <M-S-p> :GFiles<CR>
+
 " set window layout
 " - down / up / left / right
-let g:fzf_layout = { 'down': '40%' }
-
-" Ignore some folders and files for CtrlP indexing
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\.git$\|\.yardoc\|node_modules\|log\|tmp$',
-  \ 'file': '\.so$\|\.dat$|\.DS_Store$'
-  \ }
+let g:fzf_layout = { 'down': '30%' }
 
 " Customize fzf colors to match your color scheme
 " - fzf#wrap translates this to a set of `--color` options
@@ -228,6 +325,19 @@ let g:fzf_colors =
 " - When set, CTRL-N and CTRL-P will be bound to 'next-history' and
 "   'previous-history' instead of 'down' and 'up'.
 let g:fzf_history_dir = '~/.local/share/fzf-history'
+
+" Set colors for diff to not be those terrible ones
+hi Pmenu ctermfg=White ctermbg=Black
+hi PmenuSel ctermfg=White ctermbg=Black
+hi FgCocErrorFloatBgCocFloating ctermfg=White ctermbg=Black guifg=White guibg=Black
+hi DiffAdd      ctermfg=Black          ctermbg=DarkGreen
+hi DiffChange   ctermfg=Black          ctermbg=LightMagenta
+hi DiffDelete   ctermfg=Black     ctermbg=Red
+hi DiffText     ctermfg=Black        ctermbg=Magenta
+
+"-- startify --"
+" do not change working directory
+let g:startify_change_to_dir = 0
 
 " set startify header
 let g:startify_custom_header = 'startify#pad(startify#fortune#boxed())'
