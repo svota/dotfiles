@@ -1,0 +1,16 @@
+#!/bin/bash
+mkdir -p ~/.config/nvim
+
+ln -sf ~/dotfiles/init.vim ~/.config/nvim/init.vim
+ln -sf ~/dotfiles/.vimrc ~/.vimrc
+ln -sf ~/dotfiles/.bash_profile ~/.bash_profile
+ln -sf ~/dotfiles/.bashrc ~/.bashrc
+
+mkdir -p ~/bin
+ln -sf ~/dotfiles/bin/aws-temppass ~/bin/aws-temppass
+ln -sf ~/dotfiles/bin/bash-test ~/bin/bash-test
+ln -sf ~/dotfiles/bin/git-send ~/bin/git-send
+ln -sf ~/dotfiles/bin/git-test ~/bin/git-test
+ln -sf ~/dotfiles/bin/yarn-test ~/bin/yarn-test
+ln -sf ~/dotfiles/bin/rename.sh ~/bin/rename.sh
+ln -sf ~/dotfiles/bin/setdotfiles ~/bin/setdotfiles
