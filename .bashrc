@@ -125,7 +125,7 @@ git_branch() {
 }
 
 #set title to current working directory
-title='\e]0;Alacritty - \w\a'
+title='\e]0;\w\a'
 # \[\e]0;\u:\w\a\[${debian_chroot:+($debian_chroot)}\]\[\033[01;32m\]\u\[\033[00m\]\[:\]\[\033[01;34m\]\[\w\]\[\033[00m\]\[\033[00;35m\]$(git_branch)\[\033[00m\]\
 export PS1="\[\033[1;33m\]\w\[\033[1;34m\]\$(git_branch)\[\033[0m\]\$ \[$(echo -e "$title")\]"
 
