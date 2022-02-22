@@ -135,3 +135,5 @@ export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 export PATH="$PATH:/home/svordy/work/masos/tools"
+export EDITOR='nvim'
+export VISUAL='nvim'
