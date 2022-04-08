@@ -17,3 +17,6 @@ ln -sf ~/dotfiles/bin/git-test ~/bin/git-test
 ln -sf ~/dotfiles/bin/yarn-test ~/bin/yarn-test
 ln -sf ~/dotfiles/bin/rename.sh ~/bin/rename.sh
 ln -sf ~/dotfiles/bin/setdotfiles ~/bin/setdotfiles
+ln -sf ~/dotfiles/bin/convertMobiToEpub ~/bin/convertMobiToEpub
+ln -sf ~/dotfiles/bin/update-work-environment ~/bin/update-work-environment
+ln -sf ~/dotfiles/bin/aws-auth ~/bin/aws-auth

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cp ~/work/environments/${1}/.env ~/work/demo/.env
+cp ~/work/environments/${1}/.env ~/work/staff_ui_demo/.env
+cp ~/work/environments/${1}/aws-exports.js ~/work/demo/src/aws-exports.js
+cp ~/work/environments/${1}/aws-exports.js ~/work/staff_ui_demo/src/aws-exports.js

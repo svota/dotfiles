@@ -1,0 +1,11 @@
+#!/bin/zsh
+
+for file in *.epub
+do
+  mv $file remove.epub
+  b=$(basename -s .epub $file)
+  
+  printf -v f '%q' "$b"
+  ebook-convert remove.epub $f.mobi
+  rm remove.epub
+done
