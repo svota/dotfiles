@@ -4,7 +4,10 @@ mkdir -p ~/.config/nvim
 ln -sf ~/dotfiles/init.vim ~/.config/nvim/init.vim
 ln -sf ~/dotfiles/.vimrc ~/.vimrc
 ln -sf ~/dotfiles/.bashrc ~/.bashrc
-source ~/.bashrc
+ln -sf ~/dotfiles/.zshrc ~/.zshrc
+ln -sf ~/dotfiles/.gitconfig ~/.gitconfig
+ln -sf ~/dotfiles/.npmrc ~/.npmrc
+source ~/.zshrc
 
 mkdir -p ~/bin
 ln -sf ~/dotfiles/bin/aws-temppass ~/bin/aws-temppass

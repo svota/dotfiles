@@ -91,7 +91,7 @@ function! ToggleVExplorer()
         let t:expl_buf_num = bufnr("%")
     endif
 endfunction
-map <silent> <C-M-E> :call ToggleVExplorer()<CR>
+" map <silent> <C-M-E> :call ToggleVExplorer()<CR>
 
 " Hit enter in the file browser to open the selected
 " file with :vsplit to the right of browser
@@ -171,17 +171,22 @@ Plug 'vim-test/vim-test'
 Plug 'preservim/nerdtree' |
   \ Plug 'Xuyuanp/nerdtree-git-plugin'
 
+" VimSpector for debugging
+Plug 'puremourning/vimspector'
+
 call plug#end()
 
 
 "-- NERDTree --"
 " open with CTRL-E
 nnoremap <C-E> :NERDTreeMirror<CR>:NERDTreeToggle<CR>
+" open to the local file with CTRL-ALT-E
+nnoremap <C-M-E> :NERDTreeMirror<CR>:NERDTreeFind<CR>
 " Mirror the NERDTree before showing it. This makes it the same on all tabs.
 nnoremap <C-n> :NERDTreeMirror<CR>:NERDTreeFocus<CR>
 
 " Start NERDTree and put the cursor back in the other window.
-autocmd VimEnter * NERDTree | wincmd p
+" autocmd VimEnter * NERDTree | wincmd p
 
 " Close the tab if NERDTree is the only window remaining in it.
 autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
@@ -293,6 +298,9 @@ nmap <leader>af  <Plug>(coc-fix-current)
 
 
 "-- FZF CONFIG --"
+" use fdfind
+let $FZF_DEFAULT_COMMAND = 'fdfind --type f'
+
 " redefine entry key
 map <C-p> :FZF<CR>
 

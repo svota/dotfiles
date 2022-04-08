@@ -2,7 +2,7 @@
 
 CURRENT_GIT_BRANCH=$(git branch 2>/dev/null | grep '^*' | colrm 1 2)
 
-git checkout develop/daniel
+git checkout ${1:=develop/daniel}
 git pull
 git merge -m "$CURRENT_GIT_BRANCH" $CURRENT_GIT_BRANCH 
 git push
